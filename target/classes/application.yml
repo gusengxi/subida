@@ -7,8 +7,8 @@ spring:
     password: z0130z
     driver-class-name: com.mysql.cj.jdbc.Driver
   main:
+#    spring关闭启动标志
     banner-mode: off
-
 mybatis-plus:
   global-config:
     db-config:
@@ -16,3 +16,4 @@ mybatis-plus:
       table-prefix: tbl_
 #      隐藏启动log
     banner: false
+

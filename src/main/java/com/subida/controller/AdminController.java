@@ -5,46 +5,40 @@ import com.subida.common.R;
 import com.subida.entity.Admin;
 import com.subida.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.One;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RestController
-@RequestMapping("/Admin")
+@RequestMapping(value = "/Admin")
 public class AdminController{
 
     @Autowired
     private AdminService adminService;
-
     //登录
     @PostMapping("/login")
     public R<Admin> login(HttpServletRequest request, @RequestBody Admin admin){
-        System.out.println(111);
-
         //加密密码
         String password = admin.getPassword();
-        password = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         //验证账号是否存在
         LambdaQueryWrapper<Admin> adminLambdaQueryWrapper = new LambdaQueryWrapper<>();
         adminLambdaQueryWrapper.eq(Admin::getUsername,admin.getUsername());
         Admin one = adminService.getOne(adminLambdaQueryWrapper);
-
         //账号存在与否
         if (one == null){
             return R.error("账号不存在");
         }
 
         //密码是否正确
-        if (one.getPassword().equals(admin.getPassword())){
+        if (!one.getPassword().equals(password)){
             return R.error("密码不存在");
         }
 
@@ -54,9 +48,7 @@ public class AdminController{
         }
 
         //登录成功
-        System.out.println(11111111111L);
-
-
-        return null;
+        request.getSession().setAttribute("admin", one.getAdminId());
+        return R.success(one);
     }
 }
