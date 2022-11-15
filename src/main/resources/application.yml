@@ -6,3 +6,13 @@ spring:
     username: zhao
     password: z0130z
     driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    banner-mode: off
+
+mybatis-plus:
+  global-config:
+    db-config:
+#      实体类映射表头
+      table-prefix: tbl_
+#      隐藏启动log
+    banner: false

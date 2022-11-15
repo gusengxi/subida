@@ -15,5 +15,8 @@ public class Admin {
     private String username;
     private String password;
     private String phone;
-    private String status;
+    private int status;
+
+    private Date updateTime;
+    private Date createTime;
 }
